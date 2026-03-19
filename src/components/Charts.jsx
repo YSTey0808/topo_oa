@@ -1,27 +1,35 @@
-import { useMemo } from 'react';
+import { useState, useMemo } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid,
   PieChart, Pie, Cell, Legend, ResponsiveContainer,
 } from 'recharts';
 
-const STATUS_COLORS = { Alive: '#4ade80', Dead: '#f87171', unknown: '#3d5a78' };
-const BAR_COLOR     = '#22d3ee';
+const STATUS_COLORS = { Alive: '#10b981', Dead: '#ef4444', unknown: '#94a3b8' };
+const BAR_COLOR     = '#4f46e5';
 
-const TOOLTIP = {
+const TOOLTIP_STYLE = {
   contentStyle: {
-    background: '#0d1525',
-    border: '1px solid #1b2f4a',
-    borderRadius: 6,
-    fontFamily: 'Rajdhani, sans-serif',
-    letterSpacing: '0.05em',
+    background: '#ffffff',
+    border: '1px solid #e2e8f0',
+    borderRadius: 8,
+    boxShadow: '0 4px 12px rgb(0 0 0 / 0.08)',
+    fontFamily: 'Inter, sans-serif',
+    fontSize: 13,
   },
-  labelStyle: { color: '#94a3b8', fontSize: 12 },
-  itemStyle:  { color: '#cbd5e1', fontSize: 13 },
+  labelStyle: { color: '#475569', fontWeight: 600 },
+  itemStyle:  { color: '#64748b' },
 };
 
-const AXIS_TICK = { fill: '#3d5a78', fontSize: 11, fontFamily: 'Rajdhani, sans-serif' };
+const AXIS_TICK = { fill: '#94a3b8', fontSize: 11, fontFamily: 'Inter, sans-serif' };
+
+const CHART_OPTIONS = [
+  { value: 'origins', label: 'Origin Distribution' },
+  { value: 'status',  label: 'Status Breakdown'    },
+];
 
 export default function Charts({ characters }) {
+  const [view, setView] = useState('origins');
+
   const originData = useMemo(() => {
     const counts = {};
     characters.forEach((c) => {
@@ -32,7 +40,7 @@ export default function Charts({ characters }) {
       .sort((a, b) => b[1] - a[1])
       .slice(0, 10)
       .map(([fullName, count]) => ({
-        name:     fullName.length > 22 ? fullName.slice(0, 20) + '…' : fullName,
+        name:     fullName.length > 24 ? fullName.slice(0, 22) + '…' : fullName,
         fullName,
         count,
       }));
@@ -44,59 +52,74 @@ export default function Charts({ characters }) {
     return Object.entries(counts).filter(([, v]) => v > 0).map(([name, value]) => ({ name, value }));
   }, [characters]);
 
-  const sectionTitle = 'text-[10px] tracking-[0.3em] text-portal/50 uppercase mb-4 font-display';
-
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <div className="bg-white rounded-xl shadow-card border border-slate-100 p-5">
+      {/* Header + dropdown */}
+      <div className="flex items-start justify-between mb-5">
+        <div>
+          <h2 className="text-sm font-semibold text-slate-700">Analytics</h2>
+          <p className="text-xs text-slate-400 mt-0.5">
+            Based on {characters.length.toLocaleString()} character{characters.length !== 1 ? 's' : ''}
+          </p>
+        </div>
 
-      {/* Origin Bar Chart */}
-      <div className="bg-surface border border-rim rounded p-4">
-        <p className={sectionTitle}>◈ Top 10 Origin Worlds</p>
-        <ResponsiveContainer width="100%" height={285}>
-          <BarChart data={originData} layout="vertical" margin={{ left: 0, right: 20, top: 2, bottom: 2 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#1b2f4a" horizontal={false} />
-            <XAxis type="number" tick={AXIS_TICK} />
-            <YAxis type="category" dataKey="name" tick={AXIS_TICK} width={140} />
+        <select
+          value={view}
+          onChange={(e) => setView(e.target.value)}
+          className="text-sm border border-slate-200 rounded-lg px-3 py-1.5 bg-white text-slate-600
+                     focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-400
+                     cursor-pointer transition-colors"
+        >
+          {CHART_OPTIONS.map((o) => (
+            <option key={o.value} value={o.value}>{o.label}</option>
+          ))}
+        </select>
+      </div>
+
+      {/* Charts */}
+      {view === 'origins' ? (
+        <ResponsiveContainer width="100%" height={300}>
+          <BarChart data={originData} layout="vertical" margin={{ left: 0, right: 24, top: 2, bottom: 2 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" horizontal={false} />
+            <XAxis type="number" tick={AXIS_TICK} axisLine={false} tickLine={false} />
+            <YAxis type="category" dataKey="name" tick={AXIS_TICK} width={150} axisLine={false} tickLine={false} />
             <Tooltip
-              {...TOOLTIP}
+              {...TOOLTIP_STYLE}
               formatter={(v) => [v, 'Characters']}
               labelFormatter={(l) => originData.find((d) => d.name === l)?.fullName || l}
             />
-            <Bar dataKey="count" fill={BAR_COLOR} radius={[0, 3, 3, 0]} />
+            <Bar dataKey="count" fill={BAR_COLOR} radius={[0, 4, 4, 0]} />
           </BarChart>
         </ResponsiveContainer>
-      </div>
-
-      {/* Status Pie Chart */}
-      <div className="bg-surface border border-rim rounded p-4">
-        <p className={sectionTitle}>◈ Status Distribution</p>
-        <ResponsiveContainer width="100%" height={285}>
+      ) : (
+        <ResponsiveContainer width="100%" height={300}>
           <PieChart>
             <Pie
               data={statusData}
               cx="50%"
-              cy="50%"
-              outerRadius={95}
+              cy="45%"
+              innerRadius={65}
+              outerRadius={105}
+              paddingAngle={3}
               dataKey="value"
-              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
-              labelLine={{ stroke: '#1b2f4a' }}
             >
               {statusData.map((entry) => (
-                <Cell key={entry.name} fill={STATUS_COLORS[entry.name] ?? '#3d5a78'} />
+                <Cell key={entry.name} fill={STATUS_COLORS[entry.name] ?? '#94a3b8'} />
               ))}
             </Pie>
-            <Tooltip {...TOOLTIP} formatter={(v, n) => [v, n]} />
+            <Tooltip {...TOOLTIP_STYLE} formatter={(v, n) => [v, n]} />
             <Legend
+              iconType="circle"
+              iconSize={8}
               formatter={(value) => (
-                <span style={{ color: '#94a3b8', fontSize: 12, fontFamily: 'Rajdhani, sans-serif', letterSpacing: '0.08em' }}>
-                  {value.toUpperCase()}
+                <span style={{ color: '#64748b', fontSize: 12, fontFamily: 'Inter, sans-serif' }}>
+                  {value}
                 </span>
               )}
             />
           </PieChart>
         </ResponsiveContainer>
-      </div>
-
+      )}
     </div>
   );
 }

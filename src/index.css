@@ -2,29 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  color-scheme: dark;
-}
-
 body {
-  font-family: 'Rajdhani', sans-serif;
-  background-color: #07090e;
-  letter-spacing: 0.02em;
+  font-family: 'Inter', sans-serif;
+  background-color: #f0f4f8;
+  color: #1e293b;
 }
 
-/* Dot-grid texture for header */
-.dot-grid {
-  background-image: radial-gradient(circle, #1b2f4a 1px, transparent 1px);
-  background-size: 22px 22px;
-}
-
-/* Scrollbar */
 ::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: #0d1525; }
-::-webkit-scrollbar-thumb { background: #1b2f4a; border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: #22d3ee40; }
-
-/* Portal glow on card hover */
-.card-hover:hover {
-  box-shadow: 0 0 0 1px #22d3ee30, 0 4px 24px #22d3ee0a;
-}
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }

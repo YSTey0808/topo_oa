@@ -4,18 +4,14 @@ export default {
   theme: {
     extend: {
       colors: {
-        void:    '#07090e',
-        surface: '#0d1525',
-        panel:   '#111e33',
-        rim:     '#1b2f4a',
-        portal:  '#22d3ee',
-        morty:   '#fbbf24',
-        alive:   '#4ade80',
-        dead:    '#f87171',
-        muted:   '#3d5a78',
+        canvas: '#f0f4f8',
       },
       fontFamily: {
-        display: ['Rajdhani', 'sans-serif'],
+        display: ['Inter', 'sans-serif'],
+      },
+      boxShadow: {
+        card: '0 1px 3px 0 rgb(0 0 0 / 0.06), 0 1px 2px -1px rgb(0 0 0 / 0.06)',
+        'card-hover': '0 4px 12px 0 rgb(0 0 0 / 0.08), 0 1px 3px -1px rgb(0 0 0 / 0.06)',
       },
     },
   },

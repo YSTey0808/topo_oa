@@ -1,34 +1,36 @@
 const inputClass =
-  'w-full bg-void border border-rim rounded px-3 py-2 text-slate-300 text-sm tracking-wide ' +
-  'focus:outline-none focus:border-portal/60 focus:ring-1 focus:ring-portal/15 ' +
-  'disabled:opacity-40 disabled:cursor-not-allowed transition-colors';
+  'w-full bg-white border border-slate-200 rounded-lg px-3 py-2 text-sm text-slate-700 ' +
+  'placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 ' +
+  'focus:border-indigo-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors';
 
 export default function FilterBar({ filters, speciesOptions, originOptions, onChange, onReset, loading }) {
   return (
-    <div className="bg-surface border border-rim rounded p-4">
-      <p className="text-[10px] tracking-[0.3em] text-portal/50 uppercase mb-4 font-display">
-        ◈ Search Parameters
-      </p>
-
+    <div className="bg-white rounded-xl shadow-card border border-slate-100 p-4">
       <div className="flex flex-wrap gap-3 items-end">
+
         {/* Name search */}
-        <div className="flex-1 min-w-[180px]">
-          <label className="block text-[10px] tracking-[0.2em] text-muted uppercase mb-1.5">
-            Character Name
+        <div className="flex-1 min-w-[200px]">
+          <label className="block text-[11px] font-medium text-slate-500 uppercase tracking-wide mb-1.5">
+            Search
           </label>
-          <input
-            type="text"
-            placeholder="Search by name..."
-            value={filters.search}
-            onChange={(e) => onChange('search', e.target.value)}
-            disabled={loading}
-            className={inputClass}
-          />
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-sm pointer-events-none">
+              🔍
+            </span>
+            <input
+              type="text"
+              placeholder="Search by name..."
+              value={filters.search}
+              onChange={(e) => onChange('search', e.target.value)}
+              disabled={loading}
+              className={`${inputClass} pl-8`}
+            />
+          </div>
         </div>
 
         {/* Species */}
         <div className="min-w-[140px]">
-          <label className="block text-[10px] tracking-[0.2em] text-muted uppercase mb-1.5">
+          <label className="block text-[11px] font-medium text-slate-500 uppercase tracking-wide mb-1.5">
             Species
           </label>
           <select
@@ -44,7 +46,7 @@ export default function FilterBar({ filters, speciesOptions, originOptions, onCh
 
         {/* Status */}
         <div className="min-w-[130px]">
-          <label className="block text-[10px] tracking-[0.2em] text-muted uppercase mb-1.5">
+          <label className="block text-[11px] font-medium text-slate-500 uppercase tracking-wide mb-1.5">
             Status
           </label>
           <select
@@ -62,7 +64,7 @@ export default function FilterBar({ filters, speciesOptions, originOptions, onCh
 
         {/* Origin */}
         <div className="min-w-[180px]">
-          <label className="block text-[10px] tracking-[0.2em] text-muted uppercase mb-1.5">
+          <label className="block text-[11px] font-medium text-slate-500 uppercase tracking-wide mb-1.5">
             Origin
           </label>
           <select
@@ -76,12 +78,12 @@ export default function FilterBar({ filters, speciesOptions, originOptions, onCh
           </select>
         </div>
 
-        {/* Reset */}
+        {/* Clear */}
         <button
           onClick={onReset}
           disabled={loading}
-          className="px-5 py-2 border border-rim text-muted text-sm tracking-widest uppercase
-                     hover:border-portal/50 hover:text-portal transition-colors rounded
+          className="px-4 py-2 text-sm font-medium text-slate-500 hover:text-slate-700
+                     hover:bg-slate-50 border border-slate-200 rounded-lg transition-colors
                      disabled:opacity-40 disabled:cursor-not-allowed"
         >
           Clear
