@@ -19,7 +19,7 @@ const twoChars = [makeChar(1), makeChar(2)];
 describe('CharacterGrid', () => {
   it('shows empty state when characters array is empty', () => {
     render(<CharacterGrid characters={[]} total={0} page={1} totalPages={0} onPageChange={vi.fn()} />);
-    expect(screen.getByText('No characters match your filters.')).toBeInTheDocument();
+    expect(screen.getByText('No records match your parameters')).toBeInTheDocument();
   });
 
   it('renders a card for each character', () => {
@@ -30,12 +30,12 @@ describe('CharacterGrid', () => {
 
   it('shows the correct "Showing X–Y of Z" count text', () => {
     render(<CharacterGrid characters={twoChars} total={2} page={1} totalPages={1} onPageChange={vi.fn()} />);
-    expect(screen.getByText(/Showing 1–2 of 2 characters/)).toBeInTheDocument();
+    expect(screen.getByText(/Records 1–2 of 2 entries/)).toBeInTheDocument();
   });
 
   it('uses singular "character" when total is 1', () => {
     render(<CharacterGrid characters={[makeChar(1)]} total={1} page={1} totalPages={1} onPageChange={vi.fn()} />);
-    expect(screen.getByText(/Showing 1–1 of 1 character$/)).toBeInTheDocument();
+    expect(screen.getByText(/Records 1–1 of 1 entry/)).toBeInTheDocument();
   });
 
   it('does not render pagination when totalPages is 1', () => {
@@ -76,6 +76,6 @@ describe('CharacterGrid', () => {
 
   it('displays the current page and total pages', () => {
     render(<CharacterGrid characters={twoChars} total={40} page={2} totalPages={3} onPageChange={vi.fn()} />);
-    expect(screen.getByText('Page 2 of 3')).toBeInTheDocument();
+    expect(screen.getByText('2 / 3')).toBeInTheDocument();
   });
 });

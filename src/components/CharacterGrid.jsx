@@ -2,47 +2,59 @@ import CharacterCard from './CharacterCard';
 
 const PAGE_SIZE = 20;
 
+const btnClass =
+  'px-4 py-1.5 border border-rim text-sm tracking-widest uppercase text-muted ' +
+  'hover:border-portal/60 hover:text-portal transition-colors rounded ' +
+  'disabled:opacity-30 disabled:cursor-not-allowed';
+
 export default function CharacterGrid({ characters, total, page, totalPages, onPageChange }) {
   if (characters.length === 0) {
     return (
-      <div className="text-center py-20 text-gray-400">
-        <p className="text-4xl mb-3">🔍</p>
-        <p>No characters match your filters.</p>
+      <div className="text-center py-20 border border-rim rounded bg-surface">
+        <p className="text-4xl text-muted mb-3">◌</p>
+        <p className="text-xs tracking-[0.3em] text-muted uppercase">No records match your parameters</p>
       </div>
     );
   }
 
   const start = (page - 1) * PAGE_SIZE + 1;
-  const end = Math.min(page * PAGE_SIZE, total);
+  const end   = Math.min(page * PAGE_SIZE, total);
 
   return (
     <div>
-      <p className="text-sm text-gray-400 mb-4">
-        Showing {start}–{end} of {total} character{total !== 1 ? 's' : ''}
-      </p>
+      {/* Count */}
+      <div className="flex items-center justify-between mb-4">
+        <p className="text-[10px] tracking-[0.25em] text-muted uppercase">
+          Records {start}–{end} of {total} {total !== 1 ? 'entries' : 'entry'}
+        </p>
+      </div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+      {/* Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
         {characters.map((char) => (
           <CharacterCard key={char.id} character={char} />
         ))}
       </div>
 
+      {/* Pagination */}
       {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-3 mt-8">
+        <div className="flex items-center justify-center gap-4 mt-8">
           <button
+            className={btnClass}
             onClick={() => onPageChange((p) => Math.max(1, p - 1))}
             disabled={page === 1}
-            className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-sm text-gray-300 disabled:opacity-40 hover:bg-gray-700 transition-colors"
           >
             ← Prev
           </button>
-          <span className="text-sm text-gray-400">
-            Page {page} of {totalPages}
+
+          <span className="text-[11px] tracking-[0.3em] text-muted uppercase">
+            {page} / {totalPages}
           </span>
+
           <button
+            className={btnClass}
             onClick={() => onPageChange((p) => Math.min(totalPages, p + 1))}
             disabled={page === totalPages}
-            className="px-4 py-2 bg-gray-800 border border-gray-700 rounded-md text-sm text-gray-300 disabled:opacity-40 hover:bg-gray-700 transition-colors"
           >
             Next →
           </button>

@@ -1,19 +1,23 @@
 import { useState } from 'react';
 
 const STATUS_CONFIG = {
-  Alive: { dot: 'bg-green-400', label: 'text-green-400' },
-  Dead: { dot: 'bg-red-400', label: 'text-red-400' },
-  unknown: { dot: 'bg-gray-400', label: 'text-gray-400' },
+  Alive:   { color: '#4ade80', label: 'text-alive' },
+  Dead:    { color: '#f87171', label: 'text-dead'  },
+  unknown: { color: '#3d5a78', label: 'text-muted' },
 };
 
 export default function CharacterCard({ character }) {
-  const status = STATUS_CONFIG[character.status] ?? STATUS_CONFIG.unknown;
   const [imgError, setImgError] = useState(false);
+  const status = STATUS_CONFIG[character.status] ?? STATUS_CONFIG.unknown;
 
   return (
-    <div className="bg-gray-800 rounded-lg border border-gray-700 overflow-hidden hover:border-green-500/50 hover:shadow-lg hover:shadow-green-900/20 transition-all">
+    <div
+      style={{ borderLeftColor: status.color }}
+      className="card-hover bg-surface border border-rim border-l-[3px] rounded overflow-hidden transition-all cursor-default"
+    >
+      {/* Avatar */}
       {imgError ? (
-        <div className="w-full aspect-square bg-gray-700 flex items-center justify-center text-5xl select-none">
+        <div className="w-full aspect-square bg-panel flex items-center justify-center text-4xl text-muted select-none">
           👾
         </div>
       ) : (
@@ -25,28 +29,40 @@ export default function CharacterCard({ character }) {
           onError={() => setImgError(true)}
         />
       )}
+
+      {/* Info */}
       <div className="p-3">
-        <h3 className="font-semibold text-gray-100 text-sm truncate" title={character.name}>
+        {/* ID badge */}
+        <p className="text-[9px] tracking-[0.25em] text-muted uppercase mb-1">
+          ID #{String(character.id).padStart(3, '0')}
+        </p>
+
+        <h3
+          className="font-semibold text-white text-sm truncate leading-tight"
+          title={character.name}
+        >
           {character.name}
         </h3>
 
-        <div className="flex items-center gap-1.5 mt-1">
-          <span className={`w-2 h-2 rounded-full flex-shrink-0 ${status.dot}`} />
+        {/* Status + species */}
+        <div className="flex items-center gap-1.5 mt-1.5">
+          <span style={{ backgroundColor: status.color }} className="w-1.5 h-1.5 rounded-full flex-shrink-0" />
           <span className={`text-xs ${status.label}`}>{character.status}</span>
-          <span className="text-gray-600 text-xs">·</span>
-          <span className="text-xs text-gray-400 truncate">{character.species}</span>
+          <span className="text-rim">·</span>
+          <span className="text-xs text-slate-400 truncate">{character.species}</span>
         </div>
 
-        <div className="mt-2 space-y-1.5">
+        {/* Origin / Location */}
+        <div className="mt-2.5 space-y-1.5 border-t border-rim pt-2.5">
           <div>
-            <p className="text-[10px] text-gray-500 uppercase tracking-wide">Origin</p>
-            <p className="text-xs text-gray-300 truncate" title={character.origin.name}>
+            <p className="text-[9px] tracking-[0.2em] text-muted uppercase">Origin</p>
+            <p className="text-xs text-slate-300 truncate" title={character.origin.name}>
               {character.origin.name}
             </p>
           </div>
           <div>
-            <p className="text-[10px] text-gray-500 uppercase tracking-wide">Last seen</p>
-            <p className="text-xs text-gray-300 truncate" title={character.location.name}>
+            <p className="text-[9px] tracking-[0.2em] text-muted uppercase">Last Seen</p>
+            <p className="text-xs text-slate-300 truncate" title={character.location.name}>
               {character.location.name}
             </p>
           </div>

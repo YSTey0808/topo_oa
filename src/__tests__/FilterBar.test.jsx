@@ -18,7 +18,7 @@ beforeEach(() => {
 describe('FilterBar', () => {
   it('renders the search input', () => {
     render(<FilterBar {...defaultProps} />);
-    expect(screen.getByPlaceholderText('e.g. Rick, Morty...')).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Search by name...')).toBeInTheDocument();
   });
 
   it('renders species, status, and origin selects', () => {
@@ -30,7 +30,7 @@ describe('FilterBar', () => {
 
   it('renders the Reset button', () => {
     render(<FilterBar {...defaultProps} />);
-    expect(screen.getByRole('button', { name: 'Reset' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Clear' })).toBeInTheDocument();
   });
 
   it('populates species options from props', () => {
@@ -48,7 +48,7 @@ describe('FilterBar', () => {
 
   it('calls onChange with "search" key when typing in the search input', () => {
     render(<FilterBar {...defaultProps} />);
-    fireEvent.change(screen.getByPlaceholderText('e.g. Rick, Morty...'), { target: { value: 'Morty' } });
+    fireEvent.change(screen.getByPlaceholderText('Search by name...'), { target: { value: 'Morty' } });
     expect(defaultProps.onChange).toHaveBeenCalledWith('search', 'Morty');
   });
 
@@ -72,14 +72,14 @@ describe('FilterBar', () => {
 
   it('calls onReset when the Reset button is clicked', () => {
     render(<FilterBar {...defaultProps} />);
-    fireEvent.click(screen.getByRole('button', { name: 'Reset' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Clear' }));
     expect(defaultProps.onReset).toHaveBeenCalledOnce();
   });
 
   it('disables all inputs and Reset button when loading is true', () => {
     render(<FilterBar {...defaultProps} loading={true} />);
-    expect(screen.getByPlaceholderText('e.g. Rick, Morty...')).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Reset' })).toBeDisabled();
+    expect(screen.getByPlaceholderText('Search by name...')).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Clear' })).toBeDisabled();
   });
 
   it('reflects the current filter values from props', () => {
